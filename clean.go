@@ -16,7 +16,8 @@ import (
 )
 
 var (
-	all = flag.Bool("all", false, "which include subdirectory")
+	all     = flag.Bool("all", false, "which include subdirectory")
+	pattern = flag.String("pattern", "", "which include subdirectory")
 )
 
 func main() {
@@ -64,7 +65,6 @@ func hasPattern(name string) bool {
 		".Trashes",
 		"ehthumbs.db",
 		"Thumbs.db",
-		"~",
 	}
 
 	for _, pattern := range patterns {
