@@ -22,13 +22,12 @@ var (
 func main() {
 	flag.Parse()
 
-	if len(os.Args) == 1 {
-		clean("./")
-	} else if os.Args[1] == "-all" ||
-		os.Args[1] == "--all" {
+	if len(flag.Args()) == 0 {
+    log.Print("./")
 		clean("./")
 	} else {
-		for _, args := range os.Args[1:] {
+		for _, args := range flag.Args()[1:] {
+      log.Print(args)
 			clean(args)
 		}
 	}
@@ -64,7 +63,6 @@ func hasPattern(name string) bool {
 		".Trashes",
 		"ehthumbs.db",
 		"Thumbs.db",
-		"~",
 	}
 
 	for _, pattern := range patterns {
