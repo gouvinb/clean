@@ -23,11 +23,9 @@ func main() {
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
-    log.Print("./")
 		clean("./")
 	} else {
 		for _, args := range flag.Args()[1:] {
-      log.Print(args)
 			clean(args)
 		}
 	}
