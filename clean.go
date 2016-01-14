@@ -23,13 +23,10 @@ var (
 func main() {
 	flag.Parse()
 
-	if len(os.Args) == 1 {
-		clean("./")
-	} else if os.Args[1] == "-all" ||
-		os.Args[1] == "--all" {
+	if len(flag.Args()) == 0 {
 		clean("./")
 	} else {
-		for _, args := range os.Args[1:] {
+		for _, args := range flag.Args()[1:] {
 			clean(args)
 		}
 	}
