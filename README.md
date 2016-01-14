@@ -11,14 +11,15 @@ Into terminal :
 
 `clean [FLAG arg...] <directory>`
 
-### List of task
+### List of flag
 - `all`
   - clean at all level
+- `regex`
+  - add pattern with regex
 
 ## TODO
 - [x] custom path
-- [ ] custom pattern
-- [ ] access control
+- [x] custom pattern (regex)
 - [x] list file deleted
 - [x] secure files
 - [ ] more optimization ?
