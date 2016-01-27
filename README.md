@@ -3,7 +3,7 @@ Clean directory of temp files generate.
 
 ## Installation
 - Go [https://golang.org](https://golang.org)
-- `go install github.com/gouvinb/clean`
+- `go install github.com/gouvinb/goclean`
 
 ## Usage
 ### Usage of clean :
