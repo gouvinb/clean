@@ -14,12 +14,12 @@ Into terminal :
 ### List of flag
 - `all`
   - clean at all level
-- `regex`
-  - add pattern with regex
+- `pattern`
+  - add pattern
 
 ## TODO
 - [x] custom path
-- [x] custom pattern (regex)
+- [x] custom pattern
 - [x] list file deleted
 - [x] secure files
 - [ ] more optimization ?

@@ -13,7 +13,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 )
 
@@ -30,26 +29,26 @@ func (i *stringSlice) Set(value string) error {
 
 var (
 	all   = flag.Bool("all", false, "which include subdirectory")
-	regex stringSlice
+	patternVar stringSlice
 )
 
 func main() {
-	flag.Var(&regex, "regex", "which add pattern with regex")
+	flag.Var(&patternVar, "pattern", "which add pattern")
 
 	flag.Parse()
 
 	patterns := []string{
 		".DS_Store",
 		".DS_Store?",
-		"^_.*",
+		"._*",
 		".Spotlight-V100",
 		".Trashes",
 		"ehthumbs.db",
 		"Thumbs.db",
 	}
 	if flag.NFlag() > 0 {
-		for i := 0; i < len(regex); i++ {
-			patterns = append(patterns, regex[i])
+		for i := 0; i < len(patternVar); i++ {
+			patterns = append(patterns, patternVar[i])
 		}
 	}
 
@@ -66,34 +65,43 @@ func main() {
 func clean(dir string, patterns []string) {
 	files, _ := ioutil.ReadDir(dir)
 	for _, f := range files {
-		hasPattern := hasPattern(f.Name(), patterns)
-		if !f.IsDir() && hasPattern {
+		hasPattern, pattern := hasPattern(f.Name(), patterns)
+		if !f.IsDir() && hasPattern == 0 {
 			err := os.Remove(filepath.Clean(dir + "/" + f.Name()))
 			if err != nil {
 				log.Print(err)
 			} else {
 				log.Println("Remove", filepath.Clean(dir+"/"+f.Name()))
 			}
-		} else if !f.IsDir() && !hasPattern {
+		} else if !f.IsDir() && hasPattern == 1 {
 			continue
+		} else if !f.IsDir() && hasPattern == 2 {
+			globFiles, err := filepath.Glob(dir+"/"+pattern)
+			if err!= nil {
+				log.Println(err)
+			} else {
+				for _, globFile := range globFiles {
+					err2 := os.Remove(filepath.Clean(globFile))
+					if err2 != nil {
+						log.Print(err2)
+					} else {
+						log.Println("Remove", filepath.Clean(globFile))
+					}
+				}
+			}
 		} else if *all {
 			clean(filepath.Clean(dir+"/"+f.Name()), patterns)
 		}
 	}
 }
 
-func hasPattern(name string, patterns []string) bool {
+func hasPattern(name string, patterns []string) (int, string) {
 	for _, pattern := range patterns {
 		if strings.Contains(pattern, "*") {
-			matched, err := regexp.MatchString(pattern, name)
-			if err != nil {
-				log.Panic(err)
-			} else if matched {
-				return true
-			}
+			return 2, pattern
 		} else if strings.Contains(name, pattern) {
-			return true
+			return 0, ""
 		}
 	}
-	return false
+	return 1, ""
 }
