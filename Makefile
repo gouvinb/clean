@@ -57,6 +57,8 @@ publish:
 	git add $(FILE);
 	@read -p "Commit message: " MESSAGE; \
 	git commit -am "$$MESSAGE";
+	@read -p "Branch name: " NAME; \
+	git push origin "$$NAME";
 
 run:
 	@echo "==> Run $(PACKAGE) ..."; \
